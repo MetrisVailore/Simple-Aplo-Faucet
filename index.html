@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethereum Faucet</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    input { padding: 8px; margin: 10px; width: 300px; }
+  </style>
+</head>
+<body>
+  <h1>Ethereum Faucet</h1>
+  <p>Enter your wallet address to receive test ETH:</p>
+  <input type="text" id="walletAddress" placeholder="Your Wallet Address">
+  <br>
+  <button id="sendEth">Request ETH</button>
+  <p id="status"></p>
+  
+  <script>
+    document.getElementById('sendEth').addEventListener('click', async () => {
+      const walletAddress = document.getElementById('walletAddress').value;
+      const status = document.getElementById('status');
+      status.textContent = "Sending request to the serverless function...";
+      
+      if (!/^0x[a-fA-F0-9]{40}$/.test(walletAddress)) {
+        status.textContent = "Invalid wallet address!";
+        return;
+      }
+
+      try {
+        const response = await fetch('https://Simple-Aplo-Faucet.app/api/faucet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: walletAddress })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          status.textContent = `Transaction successful! TX Hash: ${result.txHash}`;
+        } else {
+          status.textContent = `Error: ${result.error}`;
+        }
+      } catch (error) {
+        status.textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
