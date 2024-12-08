@@ -30,7 +30,7 @@
       }
 
       try {
-        const response = await fetch('https://aplo-faucet.vercel.app/api/faucet.js', {
+        const response = await fetch('https://aplo-faucet.vercel.app/api/faucet', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ address: walletAddress })
